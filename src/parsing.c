@@ -11,7 +11,7 @@ int parse_nb(char *nb){
         else
             return -1;
     }
-    int res = atoi((const char *)nb);
+    long res = atoi((const char *)nb);
     if (res <= 0)
         return -1;
     return res;
@@ -33,7 +33,6 @@ int parse_args(int ac, char **av, t_config *config){
     int i;
     i = 1;
     while(i < ac - 1){
-        // int x = 0;
         int res = parse_nb(av[i]);
         if (res == -1)
             return -1;

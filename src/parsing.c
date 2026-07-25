@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: azebahad <azebahad@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/07/25 21:17:38 by azebahad          #+#    #+#             */
+/*   Updated: 2026/07/25 21:50:49 by azebahad         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/codixion.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -72,30 +84,30 @@ int	parse_args(int ac, char **av, t_config *config)
 	return (1);
 }
 
-int	main(int ac, char **av)
-{
-	t_config	config;
-	int			x;
+// int	main(int ac, char **av)
+// {
+// 	t_config	config;
+// 	int			x;
 
-	x = parse_args(ac, av, &config);
-	if (x == -1)
-	{
-		printf("Error: Missing argument!\n");
-		return (1);
-	}
-	if (x == 0)
-		return (1);
-	printf("number_of_coders                = %d\n", config.number_of_coders);
-	printf("time_to_burnout                 = %d\n", config.time_to_burnout);
-	printf("time_to_compile                 = %d\n", config.time_to_compile);
-	printf("time_to_debug                   = %d\n", config.time_to_debug);
-	printf("time_to_refactor                = %d\n", config.time_to_refactor);
-	printf("number_of_compiles_required     = %d\n",
-		config.number_of_compiles_required);
-	printf("dongle_cooldown                 = %d\n", config.dongle_cooldown);
-	printf("scheduler                       = %s\n", config.scheduler);
-	return (0);
-}
+// 	x = parse_args(ac, av, &config);
+// 	if (x == -1)
+// 	{
+// 		printf("Error: Missing argument!\n");
+// 		return (1);
+// 	}
+// 	if (x == 0)
+// 		return (1);
+// 	printf("number_of_coders                = %d\n", config.number_of_coders);
+// 	printf("time_to_burnout                 = %d\n", config.time_to_burnout);
+// 	printf("time_to_compile                 = %d\n", config.time_to_compile);
+// 	printf("time_to_debug                   = %d\n", config.time_to_debug);
+// 	printf("time_to_refactor                = %d\n", config.time_to_refactor);
+// 	printf("number_of_compiles_required     = %d\n",
+// 		config.number_of_compiles_required);
+// 	printf("dongle_cooldown                 = %d\n", config.dongle_cooldown);
+// 	printf("scheduler                       = %s\n", config.scheduler);
+// 	return (0);
+// }
 
 // int main(int ac, char **av)
 // {

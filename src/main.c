@@ -8,8 +8,13 @@ int main(int ac, char **av)
     t_dongle   *dongles;
     t_coder    *coders;
 
-    if (parse_args(ac, av, &config) != 1)
+    int x = parse_args(ac, av, &config);
+    if (x != 1)
+    {
+        if (x == -1)
+            printf("Error: Missing argument!\n");
         return (1);
+    }
 
     dongles = malloc(sizeof(t_dongle) * config.number_of_coders);
     if (!dongles)

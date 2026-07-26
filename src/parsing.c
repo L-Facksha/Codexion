@@ -6,7 +6,7 @@
 /*   By: azebahad <azebahad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/25 21:17:38 by azebahad          #+#    #+#             */
-/*   Updated: 2026/07/25 21:50:49 by azebahad         ###   ########.fr       */
+/*   Updated: 2026/07/26 14:55:14 by azebahad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ int	parse_args(int ac, char **av, t_config *config)
 	int		i;
 	int		res;
 	char	*test_sch;
-
 	if (ac != 9)
 		return (-1);
 	i = 1;

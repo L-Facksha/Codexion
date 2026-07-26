@@ -6,16 +6,16 @@
 /*   By: azebahad <azebahad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/25 21:17:28 by azebahad          #+#    #+#             */
-/*   Updated: 2026/07/25 21:22:36 by azebahad         ###   ########.fr       */
+/*   Updated: 2026/07/26 20:47:56 by azebahad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/codixion.h"
 #include <stdlib.h>
 
-int	init_dongles(t_dongle *dongles, int count)
+int init_dongles(t_dongle *dongles, int count)
 {
-	int	i;
+	int i;
 
 	i = 0;
 	while (i < count)
@@ -28,7 +28,7 @@ int	init_dongles(t_dongle *dongles, int count)
 	return (1);
 }
 
-int	init_coders(t_coder *coders, t_dongle *dongles, t_config *config)
+int init_coders(t_coder *coders, t_dongle *dongles, t_config *config)
 {
 	int i = 0;
 

@@ -7,6 +7,7 @@ void *coder_routine(void *arg)
 {
 	t_dongle *first, *second;
 	t_coder *coder;
+	long timestamp;
 	int i = 0;
 
 	coder = (t_coder *)arg;
@@ -20,23 +21,25 @@ void *coder_routine(void *arg)
 		first = coder->right;
 		second = coder->left;
 	}
+	coder->config->start_time = get_time_ms();
 	while (i < coder->config->number_of_compiles_required)
 	{
+		timestamp = get_time_ms() - coder->config->start_time;
 		pthread_mutex_lock(&first->mutex);
-		printf("Coder %d has taken a dongle\n", coder->id);
+		printf("%ld %d has taken a dongle\n", timestamp, coder->id);
 
 		pthread_mutex_lock(&second->mutex);
-		printf("Coder %d has taken a dongle\n", coder->id);
+		printf("%ld %d has taken a dongle\n", timestamp, coder->id);
 
-		printf("Coder %d is compiling\n", coder->id);
+		printf("%ld %d is compiling\n", timestamp, coder->id);
 		usleep(coder->config->time_to_compile * 1000);
 
 		pthread_mutex_unlock(&second->mutex);
 		pthread_mutex_unlock(&first->mutex);
 
-		printf("Coder %d is debugging\n", coder->id);
+		printf("%ld %d is debugging\n", timestamp, coder->id);
 		usleep(coder->config->time_to_debug * 1000);
-		printf("Coder %d is refactoring\n\n", coder->id);
+		printf("%ld %d is refactoring\n\n", timestamp, coder->id);
 		usleep(coder->config->time_to_refactor * 1000);
 
 		i++;

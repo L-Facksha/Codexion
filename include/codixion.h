@@ -6,7 +6,7 @@
 /*   By: azebahad <azebahad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/25 21:17:32 by azebahad          #+#    #+#             */
-/*   Updated: 2026/07/25 21:54:32 by azebahad         ###   ########.fr       */
+/*   Updated: 2026/07/27 15:00:17 by azebahad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ typedef struct s_config
 	int				number_of_compiles_required;
 	int				dongle_cooldown;
 	char			*scheduler;
+	long			start_time;
 
 }					t_config;
 
@@ -51,3 +52,6 @@ int	init_coders(t_coder *coders, t_dongle *dongles, t_config *config);
 
 //todo SIMULATION
 int	create_threads(t_coder *coders, t_config *config);
+
+//todo CALCULATE TIME
+long get_time_ms(void);

@@ -13,11 +13,11 @@ void *coderA (void *arg){
     sleep(1);
     
     printf("waiting for dongle 2...\n");
-    pthread_mutex_unlock(&dongle1);
     pthread_mutex_lock(&dongle2);
     // printf("Coder A took Dangle 2\n");
     printf("Coder A Compile...\n");
-
+    
+    pthread_mutex_unlock(&dongle1);
     pthread_mutex_unlock(&dongle2);
 }
 
@@ -28,11 +28,11 @@ void *coderB (void *arg){
     sleep(1);
     
     printf("waiting for dongle 1...\n");
-    pthread_mutex_unlock(&dongle2);
     pthread_mutex_lock(&dongle1);
     // printf("Coder B took Dangle 1\n");
     printf("Coder B Compile...\n");
-
+    
+    pthread_mutex_unlock(&dongle2);
     pthread_mutex_unlock(&dongle1);
 }
 

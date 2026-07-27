@@ -6,11 +6,15 @@
 /*   By: azebahad <azebahad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/25 21:17:32 by azebahad          #+#    #+#             */
-/*   Updated: 2026/07/27 15:00:17 by azebahad         ###   ########.fr       */
+/*   Updated: 2026/07/27 22:58:11 by azebahad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <pthread.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/time.h>
+#include <stdio.h>
 
 typedef struct s_config
 {
@@ -23,6 +27,7 @@ typedef struct s_config
 	int				dongle_cooldown;
 	char			*scheduler;
 	long			start_time;
+	pthread_mutex_t print_mutex;
 
 }					t_config;
 
@@ -55,3 +60,10 @@ int	create_threads(t_coder *coders, t_config *config);
 
 //todo CALCULATE TIME
 long get_time_ms(void);
+
+//todo PRINT STATUS
+void print_status(t_coder *coder, const char *status);
+
+//todo CLEANUP
+void cleanup(t_config *config, t_coder *coders, t_dongle *dongels);
+`

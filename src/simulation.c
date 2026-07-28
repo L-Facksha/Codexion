@@ -1,3 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   simulation.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: azebahad <azebahad@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/07/28 15:28:27 by azebahad          #+#    #+#             */
+/*   Updated: 2026/07/28 17:39:05 by azebahad         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+
 #include "../include/codixion.h"
 #include <pthread.h>
 #include <stdio.h>
@@ -21,6 +34,7 @@ void *coder_routine(void *arg)
 		first = coder->right;
 		second = coder->left;
 	}
+
 	while (i < coder->config->number_of_compiles_required)
 	{
 		pthread_mutex_lock(&first->mutex);

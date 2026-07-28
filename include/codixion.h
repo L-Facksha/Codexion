@@ -6,15 +6,22 @@
 /*   By: azebahad <azebahad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/25 21:17:32 by azebahad          #+#    #+#             */
-/*   Updated: 2026/07/27 22:58:11 by azebahad         ###   ########.fr       */
+/*   Updated: 2026/07/28 18:26:24 by azebahad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <pthread.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/time.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <sys/time.h>
+#include <unistd.h>
+
+typedef struct s_schedulare
+{
+	pthread_mutex_t	turn_mutex;
+	pthread_cond_t	turn_change;
+	int				next_coder;
+}					t_scheduler;
 
 typedef struct s_config
 {
@@ -27,7 +34,8 @@ typedef struct s_config
 	int				dongle_cooldown;
 	char			*scheduler;
 	long			start_time;
-	pthread_mutex_t print_mutex;
+	pthread_mutex_t	print_mutex;
+	t_scheduler	schedulare;
 
 }					t_config;
 
@@ -48,22 +56,23 @@ typedef struct s_coder
 
 }					t_coder;
 
-//todo PARSING:
-int	parse_args(int ac, char **av, t_config *config);
+// todo PARSING:
+int					parse_args(int ac, char **av, t_config *config);
 
-//todo initialize INITIALIZE CODERS AND DONGLES
-int	init_dongles(t_dongle *dongles, int count);
-int	init_coders(t_coder *coders, t_dongle *dongles, t_config *config);
+// todo initialize INITIALIZE CODERS AND DONGLES
+int					init_dongles(t_dongle *dongles, int count);
+int					init_coders(t_coder *coders, t_dongle *dongles,
+						t_config *config);
 
-//todo SIMULATION
-int	create_threads(t_coder *coders, t_config *config);
+// todo SIMULATION
+int					create_threads(t_coder *coders, t_config *config);
 
-//todo CALCULATE TIME
-long get_time_ms(void);
+// todo CALCULATE TIME
+long				get_time_ms(void);
 
-//todo PRINT STATUS
-void print_status(t_coder *coder, const char *status);
+// todo PRINT STATUS
+void				print_status(t_coder *coder, const char *status);
 
-//todo CLEANUP
-void cleanup(t_config *config, t_coder *coders, t_dongle *dongels);
-`
+// todo CLEANUP
+void				cleanup(t_config *config, t_coder *coders,
+						t_dongle *dongels);

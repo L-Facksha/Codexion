@@ -1,29 +1,38 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   scheduler.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: azebahad <azebahad@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/07/28 17:29:39 by azebahad          #+#    #+#             */
-/*   Updated: 2026/07/28 18:30:09 by azebahad         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../include/codixion.h"
 
-void schedulare_waite_turn(t_coder *coder)
+int request_dongle(t_coder *coder, t_dongle *dongle)
 {
-    t_scheduler *scheduler;
+    t_request req;
 
-    scheduler = &coder->config->schedulare;
+    req.coder_id = coder->id;
+    req.deadline = coder->last_compile_start + coder->config->time_to_burnout;
+    req.timestamp = get_time_ms() - coder->config->start_time;
 
-    pthread_mutex_lock(&scheduler->turn_mutex);
-    whiel(coder->id != scheduler->next_coder)
+    pthread_mutex_lock(&dongle->scheduler.mutex);
+    if (!heap_push(dongle->scheduler.pending, req, coder->config->scheduler))
     {
-        pthread_cond_wait(&scheduler->turn_change, &scheduler->turn_mutex);
+        pthread_mutex_unlock(&dongle->scheduler.mutex);
+        return 0;
     }
-    pthread_mutex_unlock(&scheduler->turn_mutex);
+    while(dongle->taken
+        || heap_peek(dongle->scheduler.pending).coder_id != coder->id
+        || (get_time_ms() - dongle->last_released_at) < coder->config->dongle_cooldown)
+    {
+        pthread_cond_wait(&dongle->scheduler.cond, &dongle->scheduler.mutex);
+    }
+    heap_pop(dongle->scheduler.pending);
+    dongle->taken = 1;
+    pthread_mutex_unlock(&dongle->scheduler.mutex);
+    return 1;   
+}
+
+void release_dongle(t_dongle *dongle)
+{
+    pthread_mutex_lock(&dongle->scheduler.mutex);
+    dongle->taken = 0;
+    dongle->last_released_at = get_time_ms();
+    pthread_cond_broadcast(&dongle->scheduler.cond);
+    pthread_mutex_unlock(&dongle->scheduler.mutex);
 }
 
 

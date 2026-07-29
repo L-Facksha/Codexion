@@ -60,6 +60,7 @@ int	parse_args(int ac, char **av, t_config *config)
 	int		i;
 	int		res;
 	char	*test_sch;
+
 	if (ac != 9)
 		return (-1);
 	i = 1;

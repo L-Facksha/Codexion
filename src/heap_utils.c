@@ -5,10 +5,13 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: azebahad <azebahad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/07/29 19:06:18 by azebahad          #+#    #+#             */
-/*   Updated: 2026/07/29 19:06:22 by azebahad         ###   ########.fr       */
+/*   Created: 2026/07/30 23:02:08 by azebahad          #+#    #+#             */
+/*   Updated: 2026/07/30 23:02:09 by azebahad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+
+#include "../include/codixion.h"
 
 void	heap_swap(t_request *c1, t_request *c2)
 {
@@ -22,6 +25,14 @@ void	heap_swap(t_request *c1, t_request *c2)
 int	request_has_higher_priority(t_request *f, t_request *s, char *scheduler)
 {
 	if (strcmp(scheduler, "edf") == 0)
-		return (f->deadline < s->deadline);
-	return (f->timestamp < s->timestamp);
+	{
+		if (f->deadline != s->deadline)
+			return (f->deadline < s->deadline);
+		if (f->timestamp != s->timestamp)
+			return (f->timestamp < s->timestamp);
+		return (f->coder_id < s->coder_id);
+	}
+	if (f->timestamp != s->timestamp)
+		return (f->timestamp < s->timestamp);
+	return (f->coder_id < s->coder_id);
 }

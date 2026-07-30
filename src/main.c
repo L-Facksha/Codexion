@@ -1,63 +1,49 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: azebahad <azebahad@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/07/30 23:01:50 by azebahad          #+#    #+#             */
+/*   Updated: 2026/07/30 23:01:51 by azebahad         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+
+
 #include "../include/codixion.h"
-#include <stdio.h>
-#include <stdlib.h>
 
 int	main(int ac, char **av)
 {
-	t_config config;
-	t_dongle *dongles = NULL;
-	t_coder *coders = NULL;
+	t_config	config;
+	t_dongle	*dongles;
+	t_coder	*coders;
+	int		x;
 
-	int x = parse_args(ac, av, &config);
-
+	memset(&config, 0, sizeof(t_config));
+	x = parse_args(ac, av, &config);
 	if (x != 1)
 	{
 		if (x == -1)
 			printf("Error: Missing argument!\n");
 		return (1);
 	}
-
 	config.start_time = get_time_ms();
-
-	if (pthread_mutex_init(&config.print_mutex, NULL) != 0)
-	{
-		printf("Error: mutex initialization failed\n");
-		return (1);
-	}
-
 	dongles = malloc(sizeof(t_dongle) * config.number_of_coders);
-	if (!dongles)
-	{
-		cleanup(&config, coders, dongles);
-		return (1);
-	}
-
 	coders = malloc(sizeof(t_coder) * config.number_of_coders);
-	if (!coders)
+	if (!dongles || !coders)
 	{
 		cleanup(&config, coders, dongles);
 		return (1);
 	}
-
-	if (!init_dongles(dongles, config.number_of_coders))
+	if (!init_dongles(dongles, config.number_of_coders)
+		|| !init_coders(coders, dongles, &config)
+		|| !create_threads(coders, &config))
 	{
 		cleanup(&config, coders, dongles);
 		return (1);
 	}
-
-	if (!init_coders(coders, dongles, &config))
-	{
-		cleanup(&config, coders, dongles);
-		return (1);
-	}
-
-	if (!create_threads(coders, &config))
-	{
-		cleanup(&config, coders, dongles);
-		return (1);
-	}
-
 	cleanup(&config, coders, dongles);
-
 	return (0);
 }

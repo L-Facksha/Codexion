@@ -5,10 +5,11 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: azebahad <azebahad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/07/28 22:24:41 by azebahad          #+#    #+#             */
-/*   Updated: 2026/07/29 19:15:57 by azebahad         ###   ########.fr       */
+/*   Created: 2026/07/30 23:02:01 by azebahad          #+#    #+#             */
+/*   Updated: 2026/07/30 23:02:02 by azebahad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../include/codixion.h"
 
@@ -17,6 +18,7 @@ int	heap_push(t_heap *heap, t_request req, char *scheduler)
 	int	current;
 	int	parent;
 
+	(void)scheduler;
 	if (heap->size == heap->capacity)
 		return (0);
 	heap->data[heap->size] = req;
@@ -66,6 +68,7 @@ void	heap_pop(t_heap *heap, char *scheduler)
 	int	left_child;
 	int	best_child;
 
+	(void)scheduler;
 	if (heap->size == 0)
 		return ;
 	heap->data[0] = heap->data[heap->size - 1];

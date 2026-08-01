@@ -6,7 +6,7 @@
 /*   By: azebahad <azebahad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/30 23:02:19 by azebahad          #+#    #+#             */
-/*   Updated: 2026/07/31 13:23:05 by azebahad         ###   ########.fr       */
+/*   Updated: 2026/08/01 17:55:16 by azebahad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,23 @@ void	*coder_routine(void *arg)
 		first = coder->right;
 		second = coder->left;
 	}
+	
+	if (coder->config->number_of_coders == 1)
+	{
+		pthread_mutex_lock(&coder->left->mutex);
+		coder->left->taken = 1;
+		pthread_mutex_unlock(&coder->left->mutex);
+
+		print_status(coder, "has taken a dongle");
+
+		coder->last_compile_start = 0;
+
+		while (!should_stop(coder->config))
+			usleep(1000);
+
+		return (NULL);
+	}
+	
 	while (!should_stop(coder->config) && !all_coders_done(coder))
 	{
 		if (should_stop(coder->config))

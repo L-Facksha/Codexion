@@ -6,7 +6,7 @@
 /*   By: azebahad <azebahad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/30 23:01:34 by azebahad          #+#    #+#             */
-/*   Updated: 2026/07/31 21:35:20 by azebahad         ###   ########.fr       */
+/*   Updated: 2026/08/01 19:52:37 by azebahad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,23 +146,6 @@ int	request_dongles(t_coder *coder, t_dongle *first, t_dongle *second)
 	struct timespec	timeout;
 	long		wait_ms;
 
-	if (first == second)
-	{
-		if (!enqueue_request(coder, first))
-			return (0);
-		pthread_mutex_lock(&first->mutex);
-		if (!first->taken && can_grant_dongle(coder, first))
-		{
-			first->taken = 1;
-			heap_pop(&first->scheduler.pending, coder->config->scheduler);
-			pthread_mutex_unlock(&first->mutex);
-			print_status(coder, "has taken a dongle");
-			return (1);
-		}
-		pthread_mutex_unlock(&first->mutex);
-		remove_request(coder, first);
-		return (0);
-	}
 	left = first;
 	right = second;
 	if (left->id > right->id)

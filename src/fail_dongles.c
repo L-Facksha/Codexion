@@ -6,7 +6,7 @@
 /*   By: azebahad <azebahad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/30 23:02:13 by azebahad          #+#    #+#             */
-/*   Updated: 2026/07/30 23:02:14 by azebahad         ###   ########.fr       */
+/*   Updated: 2026/08/02 14:45:35 by azebahad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +16,23 @@
 int	fail_mutex(t_dongle *dongles, int i)
 {
 	free(dongles[i].scheduler.pending.data);
+	cleanup_init_dongle(dongles, i);
 	return (0);
 }
 
 int	fail_scheduler_mutex(t_dongle *dongles, int i)
 {
-	pthread_mutex_destroy(&dongles[i].mutex);
 	free(dongles[i].scheduler.pending.data);
+	pthread_mutex_destroy(&dongles[i].mutex);
+	cleanup_init_dongle(dongles, i);
 	return (0);
 }
 
 int	fail_cond(t_dongle *dongles, int i)
 {
-	pthread_mutex_destroy(&dongles[i].scheduler.mutex);
-	pthread_mutex_destroy(&dongles[i].mutex);
 	free(dongles[i].scheduler.pending.data);
+	pthread_mutex_destroy(&dongles[i].mutex);
+	pthread_mutex_destroy(&dongles[i].scheduler.mutex);
+	cleanup_init_dongle(dongles, i);
 	return (0);
 }

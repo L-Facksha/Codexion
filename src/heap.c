@@ -6,7 +6,7 @@
 /*   By: azebahad <azebahad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/30 23:02:01 by azebahad          #+#    #+#             */
-/*   Updated: 2026/08/01 15:50:17 by azebahad         ###   ########.fr       */
+/*   Updated: 2026/08/03 11:50:40 by azebahad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ int	heap_push(t_heap *heap, t_request req, char *scheduler)
 	int	current;
 	int	parent;
 
-	(void)scheduler;
 	if (heap->size == heap->capacity)
 		return (0);
 	heap->data[heap->size] = req;
@@ -68,7 +67,6 @@ void	heap_pop(t_heap *heap, char *scheduler)
 	int	left_child;
 	int	best_child;
 
-	(void)scheduler;
 	if (heap->size == 0)
 		return ;
 	heap->data[0] = heap->data[heap->size - 1];

@@ -6,7 +6,7 @@
 /*   By: azebahad <azebahad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/30 23:01:34 by azebahad          #+#    #+#             */
-/*   Updated: 2026/08/03 14:35:43 by azebahad         ###   ########.fr       */
+/*   Updated: 2026/08/03 17:01:42 by azebahad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,15 +185,15 @@ int	request_dongles(t_coder *coder, t_dongle *first, t_dongle *second)
 		wait_ms = 1;
 		if (left->last_released_at != 0)
 		{
-			wait_ms = coder->config->dongle_cooldown
-				- (get_time_ms() - left->last_released_at);
+			wait_ms = (get_time_ms() - left->last_released_at)
+				- coder->config->dongle_cooldown;
 			if (wait_ms < 1)
 				wait_ms = 1;
 		}
 		if (right->last_released_at != 0)
 		{
-			long right_wait = coder->config->dongle_cooldown
-				- (get_time_ms() - right->last_released_at);
+			long right_wait = (get_time_ms() - right->last_released_at)
+				- coder->config->dongle_cooldown;
 			if (right_wait < wait_ms)
 				wait_ms = right_wait < 1 ? 1 : right_wait;
 		}

@@ -6,7 +6,7 @@
 /*   By: azebahad <azebahad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/30 23:01:50 by azebahad          #+#    #+#             */
-/*   Updated: 2026/07/31 10:58:42 by azebahad         ###   ########.fr       */
+/*   Updated: 2026/08/03 22:27:02 by azebahad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,29 @@
 
 #include "../include/codixion.h"
 
-int	main(int ac, char **av)
+static int prs_argument(int ac, char **av, t_config *config)
 {
-	t_config	config;
-	t_dongle	*dongles;
-	t_coder	*coders;
 	int		x;
 
-	memset(&config, 0, sizeof(t_config));
+	memset(config, 0, sizeof(t_config));
 	x = parse_args(ac, av, &config);
 	if (x != 1)
 	{
 		if (x == -1)
 			printf("Error: Missing argument!\n");
-		return (1);
+		return (-1);
 	}
+	return 1;
+}
+
+int	main(int ac, char **av)
+{
+	t_config	config;
+	t_dongle	*dongles;
+	t_coder	*coders;
+	
+	if (!prs_argument(ac, av, &config))
+		return 1;
 	config.start_time = get_time_ms();
 	dongles = malloc(sizeof(t_dongle) * config.number_of_coders);
 	coders = malloc(sizeof(t_coder) * config.number_of_coders);

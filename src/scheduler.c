@@ -6,7 +6,7 @@
 /*   By: azebahad <azebahad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/30 23:01:34 by azebahad          #+#    #+#             */
-/*   Updated: 2026/08/01 19:52:37 by azebahad         ###   ########.fr       */
+/*   Updated: 2026/08/03 14:35:43 by azebahad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static int	can_grant_pair(t_coder *coder, t_dongle *left, t_dongle *right)
 	return (can_grant_dongle(coder, left) && can_grant_dongle(coder, right));
 }
 
-static int	enqueue_request(t_coder *coder, t_dongle *dongle)
+static int	push_coder_request(t_coder *coder, t_dongle *dongle)
 {
 	t_request	req;
 
@@ -87,11 +87,12 @@ static void	remove_request(t_coder *coder, t_dongle *dongle)
 
 	pthread_mutex_lock(&dongle->mutex);
 	heap = &dongle->scheduler.pending;
-	index = -1;
-	while (++index < heap->size)
+	index = 0;
+	while (index < heap->size)
 	{
 		if (heap->data[index].coder_id == coder->id)
 			break ;
+		index++;
 	}
 	if (index >= heap->size)
 	{
@@ -153,7 +154,7 @@ int	request_dongles(t_coder *coder, t_dongle *first, t_dongle *second)
 		left = second;
 		right = first;
 	}
-	if (!enqueue_request(coder, left) || !enqueue_request(coder, right))
+	if (!push_coder_request(coder, left) || !push_coder_request(coder, right))
 	{
 		if (left->scheduler.pending.size > 0)
 			remove_request(coder, left);

@@ -64,6 +64,10 @@ typedef struct s_config
 	pthread_mutex_t	state_mutex;
 	int		stop;
 	int		all_done;
+	t_dongle *dongles;
+
+	int		print_mutex_inited;
+	int		state_mutex_inited;
 } t_config;
 
 typedef struct s_coder

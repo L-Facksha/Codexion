@@ -6,7 +6,7 @@
 /*   By: azebahad <azebahad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/30 23:01:14 by azebahad          #+#    #+#             */
-/*   Updated: 2026/08/01 20:01:24 by azebahad         ###   ########.fr       */
+/*   Updated: 2026/08/05 14:02:38 by azebahad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,22 @@ int	create_threads(t_coder *coders, t_config *config)
 	t_runtime	runtime;
 	pthread_t	monitor_thread;
 
+		/* initialize flags */
+	config->print_mutex_inited = 0;
+	config->state_mutex_inited = 0;
+
 	if (pthread_mutex_init(&config->print_mutex, NULL) != 0)
 		return (0);
+	config->print_mutex_inited = 1;
+
 	if (pthread_mutex_init(&config->state_mutex, NULL) != 0)
+	{
+		/* rollback print mutex */
+		if (config->print_mutex_inited)
+			pthread_mutex_destroy(&config->print_mutex);
 		return (0);
+	}
+	config->state_mutex_inited = 1;
 	config->stop = 0;
 	config->all_done = 0;
 	runtime.coders = coders;

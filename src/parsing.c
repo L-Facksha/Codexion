@@ -6,7 +6,7 @@
 /*   By: azebahad <azebahad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/30 23:01:39 by azebahad          #+#    #+#             */
-/*   Updated: 2026/08/02 22:22:42 by azebahad         ###   ########.fr       */
+/*   Updated: 2026/08/05 14:02:00 by azebahad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int	parse_args(int ac, char **av, t_config *config)
 	{
 		res = parse_nb(av[i]);
 		if (res == -1)
-			return (0);
+			return (-2);
 		i++;
 	}
 	config->number_of_coders = parse_nb(av[1]);
@@ -84,6 +84,6 @@ int	parse_args(int ac, char **av, t_config *config)
 	config->dongle_cooldown = parse_nb(av[7]);
 	config->scheduler = parse_scheduler(av[8]);
 	if (!config->scheduler)
-		return (0);
+		return (-2);
 	return (1);
 }

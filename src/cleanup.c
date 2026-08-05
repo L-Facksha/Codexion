@@ -6,7 +6,7 @@
 /*   By: azebahad <azebahad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/30 23:02:23 by azebahad          #+#    #+#             */
-/*   Updated: 2026/08/02 14:51:12 by azebahad         ###   ########.fr       */
+/*   Updated: 2026/08/05 13:58:27 by azebahad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,10 @@ void	cleanup(t_config *config, t_coder *coders, t_dongle *dongels)
 
 	if (config)
 	{
-		pthread_mutex_destroy(&config->print_mutex);
-		pthread_mutex_destroy(&config->state_mutex);
+		if (config->print_mutex_inited)
+			pthread_mutex_destroy(&config->print_mutex);
+		if (config->state_mutex_inited)
+			pthread_mutex_destroy(&config->state_mutex);
 	}
 	if (coders)
 		free(coders);

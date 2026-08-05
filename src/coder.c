@@ -6,7 +6,7 @@
 /*   By: azebahad <azebahad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/30 23:02:19 by azebahad          #+#    #+#             */
-/*   Updated: 2026/08/01 17:55:16 by azebahad         ###   ########.fr       */
+/*   Updated: 2026/08/05 13:58:47 by azebahad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,42 +36,51 @@ static int	all_coders_done(t_coder *coder)
 
 void	*coder_routine(void *arg)
 {
-	t_coder	*coder;
-	t_dongle	*first;
-	t_dongle	*second;
-	long		now;
+	t_coder *coder;
+    t_dongle *first;
+    t_dongle *second;
+    long        now;
 
-	coder = (t_coder *)arg;
-	first = coder->left;
-	second = coder->right;
-	if (first->id > second->id)
-	{
-		first = coder->right;
-		second = coder->left;
-	}
-	
-	if (coder->config->number_of_coders == 1)
-	{
-		pthread_mutex_lock(&coder->left->mutex);
-		coder->left->taken = 1;
-		pthread_mutex_unlock(&coder->left->mutex);
+    coder = (t_coder *)arg;
+    first = coder->left;
+    second = coder->right;
+    if (first->id > second->id)
+    {
+        first = coder->right;
+        second = coder->left;
+    }
 
-		print_status(coder, "has taken a dongle");
+    /* small initial stagger to reduce contention (does not change algorithm) */
+    if (coder->config->number_of_coders > 1 && (coder->id % 2) == 0)
+        usleep(1000);
 
-		coder->last_compile_start = 0;
+    if (coder->config->number_of_coders == 1)
+    {
+        /* single-dongle full cycle: repeatedly compile/debug/refactor until stop or required compiles */
+        if (!should_stop(coder->config) && !all_coders_done(coder))
+        {
+            /* take dongle */
+            pthread_mutex_lock(&coder->left->mutex);
+            coder->left->taken = 1;
+            pthread_mutex_unlock(&coder->left->mutex);
 
-		while (!should_stop(coder->config))
-			usleep(1000);
+            print_status(coder, "has taken a dongle");
+            pthread_mutex_lock(&coder->config->state_mutex);
+            coder->last_compile_start = get_time_ms() - coder->config->start_time;
+            pthread_mutex_unlock(&coder->config->state_mutex);
 
-		return (NULL);
-	}
+        }
+        return (NULL);
+    }
 	
 	while (!should_stop(coder->config) && !all_coders_done(coder))
 	{
 		if (should_stop(coder->config))
 			break ;
 		now = get_time_ms() - coder->config->start_time;
-		coder->last_compile_start = now;
+		pthread_mutex_lock(&coder->config->state_mutex);
+        coder->last_compile_start = now;
+        pthread_mutex_unlock(&coder->config->state_mutex);
 		if (!request_dongles(coder, first, second))
 			break ;
 		if (should_stop(coder->config))
@@ -107,3 +116,4 @@ void	*coder_routine(void *arg)
 	}
 	return (NULL);
 }
+

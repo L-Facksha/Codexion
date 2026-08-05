@@ -6,7 +6,7 @@
 /*   By: azebahad <azebahad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/30 23:01:50 by azebahad          #+#    #+#             */
-/*   Updated: 2026/08/03 22:27:02 by azebahad         ###   ########.fr       */
+/*   Updated: 2026/08/05 14:01:27 by azebahad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,13 @@ static int prs_argument(int ac, char **av, t_config *config)
 	int		x;
 
 	memset(config, 0, sizeof(t_config));
-	x = parse_args(ac, av, &config);
-	if (x != 1)
+	x = parse_args(ac, av, config);
+	if (x == -1 || x == -2)
 	{
 		if (x == -1)
-			printf("Error: Missing argument!\n");
+			printf("Error: Invalid number of arguments\n");
+		else if (x == -2)
+			printf("Error: Invalid argument format\n");
 		return (-1);
 	}
 	return 1;
@@ -35,7 +37,7 @@ int	main(int ac, char **av)
 	t_dongle	*dongles;
 	t_coder	*coders;
 	
-	if (!prs_argument(ac, av, &config))
+	if (prs_argument(ac, av, &config) == -1)
 		return 1;
 	config.start_time = get_time_ms();
 	dongles = malloc(sizeof(t_dongle) * config.number_of_coders);

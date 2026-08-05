@@ -6,10 +6,9 @@
 /*   By: azebahad <azebahad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/30 23:01:34 by azebahad          #+#    #+#             */
-/*   Updated: 2026/08/03 17:01:42 by azebahad         ###   ########.fr       */
+/*   Updated: 2026/08/05 14:02:26 by azebahad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 
 #include "../include/codixion.h"
@@ -182,21 +181,42 @@ int	request_dongles(t_coder *coder, t_dongle *first, t_dongle *second)
 		}
 		pthread_mutex_unlock(&right->mutex);
 		pthread_mutex_unlock(&left->mutex);
-		wait_ms = 1;
-		if (left->last_released_at != 0)
+		    /* Read last_released_at under each dongle mutex to avoid data race with release_dongle */
+		long left_last = 0;
+		long right_last = 0;
+
+		pthread_mutex_lock(&left->mutex);
+		left_last = left->last_released_at;
+		pthread_mutex_unlock(&left->mutex);
+
+		if (right != left)
 		{
-			wait_ms = (get_time_ms() - left->last_released_at)
-				- coder->config->dongle_cooldown;
-			if (wait_ms < 1)
-				wait_ms = 1;
+			pthread_mutex_lock(&right->mutex);
+			right_last = right->last_released_at;
+			pthread_mutex_unlock(&right->mutex);
 		}
-		if (right->last_released_at != 0)
+		else
+			right_last = left_last; /* same dongle */
+
+		/* compute remaining cooldown (ms). Keep your original semantics (minimal change) */
+		long now = get_time_ms();
+		long left_wait = 1;
+		long right_wait = 1;
+
+		if (left_last != 0)
 		{
-			long right_wait = (get_time_ms() - right->last_released_at)
-				- coder->config->dongle_cooldown;
-			if (right_wait < wait_ms)
-				wait_ms = right_wait < 1 ? 1 : right_wait;
+			left_wait = coder->config->dongle_cooldown - (now - left_last);
+			if (left_wait < 1)
+				left_wait = 1;
 		}
+		if (right_last != 0)
+		{
+			right_wait = coder->config->dongle_cooldown - (now - right_last);
+			if (right_wait < 1)
+				right_wait = 1;
+		}
+
+		wait_ms = (left_wait < right_wait) ? left_wait : right_wait;
 		set_wait_timeout(&timeout, wait_ms);
 		pthread_mutex_lock(&left->mutex);
 		pthread_cond_timedwait(&left->scheduler.cond, &left->mutex, &timeout);

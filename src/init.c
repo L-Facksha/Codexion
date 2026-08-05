@@ -6,7 +6,7 @@
 /*   By: azebahad <azebahad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/30 23:01:56 by azebahad          #+#    #+#             */
-/*   Updated: 2026/08/02 14:51:21 by azebahad         ###   ########.fr       */
+/*   Updated: 2026/08/05 14:01:16 by azebahad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ static int	init_resources(t_dongle *dongles, int i, int count)
 	dongles[i].scheduler.pending.data = malloc(sizeof(t_request) * count);
 	if (!dongles[i].scheduler.pending.data)
 	{
-		free(dongles[i].scheduler.pending.data);
 		cleanup_init_dongle(dongles, i);
 		return (0);
 	}
@@ -74,3 +73,4 @@ int	init_coders(t_coder *coders, t_dongle *dongles, t_config *config)
 	}
 	return (1);
 }
+

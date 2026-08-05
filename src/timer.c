@@ -6,7 +6,7 @@
 /*   By: azebahad <azebahad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/30 23:01:21 by azebahad          #+#    #+#             */
-/*   Updated: 2026/07/30 23:01:22 by azebahad         ###   ########.fr       */
+/*   Updated: 2026/08/05 14:02:57 by azebahad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,3 +21,4 @@ long	get_time_ms(void)
 		return (-1);
 	return ((current.tv_sec * 1000) + (current.tv_usec / 1000));
 }
+

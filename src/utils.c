@@ -6,33 +6,11 @@
 /*   By: azebahad <azebahad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/30 23:01:26 by azebahad          #+#    #+#             */
-/*   Updated: 2026/08/05 14:03:13 by azebahad         ###   ########.fr       */
+/*   Updated: 2026/08/06 00:59:39 by azebahad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
-
 #include "../include/codixion.h"
-
-void	print_status(t_coder *coder, const char *status)
-{
-	long	timestamp;
-
-	pthread_mutex_lock(&coder->config->print_mutex);
-	timestamp = get_time_ms() - coder->config->start_time;
-	printf("%ld %d %s\n", timestamp, coder->id, status);
-	pthread_mutex_unlock(&coder->config->print_mutex);
-}
-
-void	print_burnout(t_coder *coder)
-{
-	long	timestamp;
-
-	pthread_mutex_lock(&coder->config->print_mutex);
-	timestamp = get_time_ms() - coder->config->start_time;
-	printf("%ld %d burned out\n", timestamp, coder->id);
-	pthread_mutex_unlock(&coder->config->print_mutex);
-}
 
 void	set_coder_state(t_coder *coder, t_state state)
 {
@@ -41,16 +19,14 @@ void	set_coder_state(t_coder *coder, t_state state)
 	pthread_mutex_unlock(&coder->config->state_mutex);
 }
 
-void set_simulation_stop(t_config *config, int all_done)
+void	set_simulation_stop(t_config *config, int all_done)
 {
-    pthread_mutex_lock(&config->state_mutex);
-    config->stop = 1;
-    config->all_done = all_done;
-    pthread_mutex_unlock(&config->state_mutex);
-
-    /* Wake all dongles so threads waiting on condition variables exit promptly */
-    if (config->dongles)
-        wake_all_dongles(config->dongles, config->number_of_coders);
+	pthread_mutex_lock(&config->state_mutex);
+	config->stop = 1;
+	config->all_done = all_done;
+	pthread_mutex_unlock(&config->state_mutex);
+	if (config->dongles)
+		wake_all_dongles(config->dongles, config->number_of_coders);
 }
 
 int	should_stop(t_config *config)

@@ -10,8 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
-
 #include "../include/codixion.h"
 
 static int	init_resources(t_dongle *dongles, int i, int count)
@@ -73,4 +71,3 @@ int	init_coders(t_coder *coders, t_dongle *dongles, t_config *config)
 	}
 	return (1);
 }
-

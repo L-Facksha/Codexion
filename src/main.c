@@ -10,13 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
-
 #include "../include/codixion.h"
 
-static int prs_argument(int ac, char **av, t_config *config)
+static int	prs_argument(int ac, char **av, t_config *config)
 {
-	int		x;
+	int	x;
 
 	memset(config, 0, sizeof(t_config));
 	x = parse_args(ac, av, config);
@@ -28,17 +26,17 @@ static int prs_argument(int ac, char **av, t_config *config)
 			printf("Error: Invalid argument format\n");
 		return (-1);
 	}
-	return 1;
+	return (1);
 }
 
 int	main(int ac, char **av)
 {
 	t_config	config;
 	t_dongle	*dongles;
-	t_coder	*coders;
-	
+	t_coder		*coders;
+
 	if (prs_argument(ac, av, &config) == -1)
-		return 1;
+		return (1);
 	config.start_time = get_time_ms();
 	dongles = malloc(sizeof(t_dongle) * config.number_of_coders);
 	coders = malloc(sizeof(t_coder) * config.number_of_coders);
@@ -47,9 +45,8 @@ int	main(int ac, char **av)
 		cleanup(&config, coders, dongles);
 		return (1);
 	}
-	if (!init_dongles(dongles, config.number_of_coders)
-		|| !init_coders(coders, dongles, &config)
-		|| !create_threads(coders, &config))
+	if (!init_dongles(dongles, config.number_of_coders) || !init_coders(coders,
+			dongles, &config) || !create_threads(coders, &config))
 	{
 		cleanup(&config, coders, dongles);
 		return (1);

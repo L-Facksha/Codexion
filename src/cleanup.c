@@ -6,7 +6,7 @@
 /*   By: azebahad <azebahad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/30 23:02:23 by azebahad          #+#    #+#             */
-/*   Updated: 2026/08/05 13:58:27 by azebahad         ###   ########.fr       */
+/*   Updated: 2026/08/05 15:41:48 by azebahad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,16 @@ void	cleanup(t_config *config, t_coder *coders, t_dongle *dongels)
 {
 	int	i;
 
-	if (config)
-	{
-		if (config->print_mutex_inited)
-			pthread_mutex_destroy(&config->print_mutex);
-		if (config->state_mutex_inited)
-			pthread_mutex_destroy(&config->state_mutex);
-	}
+	if (config && config->print_mutex_inited)
+		pthread_mutex_destroy(&config->print_mutex);
+	if (config && config->state_mutex_inited)
+		pthread_mutex_destroy(&config->state_mutex);
 	if (coders)
 		free(coders);
 	if (dongels)
 	{
 		i = 0;
-		while (i < config->number_of_coders)
+		while (config && i < config->number_of_coders)
 		{
 			if (dongels[i].scheduler.pending.data)
 				free(dongels[i].scheduler.pending.data);

@@ -1,7 +1,24 @@
 NAME = codexion
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -pthread
-SRCS = src/main.c src/parsing.c src/init.c src/simulation.c src/timer.c src/utils.c src/cleanup.c src/fail_dongles.c src/heap.c src/heap_utils.c src/scheduler.c src/coder.c src/monitor.c
+SRCS = 	src/main.c \
+		src/parsing.c \
+		src/init.c \
+		src/simulation.c \
+		src/timer.c \
+		src/utils.c \
+		src/cleanup.c \
+		src/fail_dongles.c \
+		src/heap.c \
+		src/heap_utils.c \
+		src/scheduler.c \
+		src/coder.c \
+		src/monitor.c \
+		src/remove_request_from_sch.c \
+		src/scheduler_give_take.c \
+		src/print_status.c \
+		src/release_dongle.c
+
 OBJS = $(SRCS:.c=.o)
 
 all: $(NAME)

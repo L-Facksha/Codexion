@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "../include/codixion.h"
 
 int	fail_mutex(t_dongle *dongles, int i)
